@@ -3,7 +3,7 @@
   "authors": [
     "jakubknejzlik <jakub.knejzlik@gmail.com>"
   ],
-  "description": "adminr SBAdmin layout module",
+  "description": "adminr bootstrap components module",
   "main": [
     "dist/index.js",
     "dist/styles.css"
