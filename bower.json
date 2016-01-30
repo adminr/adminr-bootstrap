@@ -25,10 +25,8 @@
     "example"
   ],
   "dependencies": {
-    "adminr-login": "~0.1.6",
-    "adminr-core": "~0.0.8",
+    "bootstrap-css-only": "~3.3.5",
     "adminr-datasources": "~0.1.6",
-    "angular-ui-router": "~0.2.15",
     "angular-bootstrap": "~1.1.0",
     "font-awesome": "~4.5.0"
   }
