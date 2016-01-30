@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="adminr-core-test">
+<head>
+    <meta charset="UTF-8">
+    <title>Adminr-bootstrap example</title>
+
+    <link rel="stylesheet" media="all" href="../dist/styles.css">
+    <link rel="stylesheet" media="all" href="../bower_components/adminr-login/dist/styles.css">
+    <link rel="stylesheet" media="all" href="../bower_components/bootstrap-css-only/css/bootstrap.css">
+    <link rel="stylesheet" media="all" href="../bower_components/font-awesome/css/font-awesome.css">
+
+    <script src="../bower_components/angular/angular.js" type="application/javascript"></script>
+    <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js" type="application/javascript"></script>
+    <script src="../bower_components/angular-ui-router/release/angular-ui-router.js" type="application/javascript"></script>
+    <script src="../bower_components/angular-resource/angular-resource.js" type="application/javascript"></script>
+    <script src="../bower_components/ngstorage/ngStorage.js" type="application/javascript"></script>
+    <script src="../bower_components/adminr-core/dist/index.js" type="application/javascript"></script>
+    <script src="../bower_components/adminr-login/dist/index.js" type="application/javascript"></script>
+    <script src="../bower_components/adminr-datasources/dist/index.js" type="application/javascript"></script>
+    <script src="../dist/index.js" type="application/javascript"></script>
+    <script src="index.js" type="application/javascript"></script>
+    <style ></style>
+</head>
+<body ng-controller="TestCtrl">
+
+<div class="container">
+
+    <div class="starter-template text-center">
+        <h1>Adminr bootstrap module</h1>
+        <p class="lead">This is example of bootstrap components in admin-bootstrap</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <adminr-panel>
+                <panel-heading>Test form</panel-heading>
+                <panel-body>
+                    <form adminr-form ng-submit="user.$save()" name="userForm">
+                        <group>
+                            <label>Username</label>
+                            <input type="text" class="form-control" name="username" ng-model="user.data.username" placeholder="Username" required />
+                        </group>
+                        <group>
+                            <label>Gender</label>
+                            <div class="form-control">
+                                <input type="radio" name="gender" value="male" ng-model="user.data.gender" required /> male
+                                <input type="radio" name="gender" value="female" ng-model="user.data.gender" required /> female
+                            </div>
+                        </group>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                </panel-body>
+            </adminr-panel>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-lg-8" ng-controller="TestCtrl">
+            <adminr-panel>
+                <panel-heading>this is table test</panel-heading>
+                <panel-body>
+                    <div class="row form-inline">
+                        <div class="col-md-6">
+                            <div class="dataTables_length">
+                                <label>
+                                    Show
+                                    <select ng-model="users.range.limit" ng-options="i for i in [5,10,20,50]" class="form-control input-sm"></select>
+                                    entries
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-right">
+                                <label>
+                                    Search:
+                                    <input ng-model="users.params.q" type="text" />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table adminr-table>
+                                <tbody body-resource="users" body-resource-path="data" body-generate-header="aa">
+                                <tr>
+                                    <td header="#" sort-column="id">#{{row.id}}</td>
+                                    <td header="Name" sort-column="username">{{row.username}}</td>
+                                    <td class="schrink">
+                                        <a class="btn btn-primary" ui-sref="userDetail({id:row.id})">detail</a>
+                                        <a class="btn btn-danger" ng-click="users.deleteItem(row)">X</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <adminr-pagination class="pagination-xl" adminr-resource="users"></adminr-pagination>
+                            <!--<uib-pagination  max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></uib-pagination>-->
+                        </div>
+                    </div>
+                </panel-body>
+            </adminr-panel>
+            <!--<div ng-repeat="row in appsResource">{{row}}</div>-->
+            {{users.params}}{{users.range}}
+        </div>
+    </div>
+</div><!-- /.container -->
+
+</body>
+</html>
