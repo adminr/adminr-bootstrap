@@ -104,6 +104,54 @@ var mod;
 
 mod = angular.module('adminr-bootstrap');
 
+mod.directive('adminrTablePanel', [
+  '$compile', '$timeout', function($compile, $timeout) {
+    var template;
+    template = require('../views/table-panel.html');
+    return {
+      scope: {
+        title: '=tablePanelTitle',
+        resource: '=tablePanelResource',
+        options: '=tablePanelOptions'
+      },
+      compile: function(elm, attrs) {
+        var body, content, table, tableContainer;
+        table = elm.find('table').clone();
+        content = angular.element(template);
+        elm.empty();
+        body = table.find('tbody');
+        table.attr('adminr-table', '');
+        body.attr('body-resource', 'resource');
+        body.attr('body-resource-path', 'data');
+        body.attr('body-generate-header', '');
+        tableContainer = angular.element(content[0].querySelector('#table-panel-content'));
+        tableContainer.removeAttr('id');
+        tableContainer.append(table);
+        return {
+          post: function(scope, elm, attrs, ctrl, transcludeFn) {
+            elm.append(content);
+            $compile(content)(scope);
+            return scope.pagingEnabled = function() {
+              var ref;
+              if ((ref = scope.options) != null ? ref.pagingDisabled : void 0) {
+                return false;
+              }
+              return true;
+              return scope.resource.range.count;
+            };
+          }
+        };
+      }
+    };
+  }
+]);
+
+
+},{"../views/table-panel.html":7}],5:[function(require,module,exports){
+var mod;
+
+mod = angular.module('adminr-bootstrap');
+
 mod.directive('adminrTable', function() {
   return {
     compile: function(elm, attributes) {
@@ -216,7 +264,7 @@ mod.directive('headerResource', function() {
 });
 
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var mod;
 
 mod = angular.module('adminr-bootstrap', ['adminr-datasources', 'ui.bootstrap']);
@@ -227,7 +275,11 @@ require('./directives/panel.coffee');
 
 require('./directives/table.coffee');
 
+require('./directives/table-panel.coffee');
+
 require('./directives/form.coffee');
 
 
-},{"./directives/form.coffee":1,"./directives/pagination.coffee":2,"./directives/panel.coffee":3,"./directives/table.coffee":4}]},{},[5]);
+},{"./directives/form.coffee":1,"./directives/pagination.coffee":2,"./directives/panel.coffee":3,"./directives/table-panel.coffee":4,"./directives/table.coffee":5}],7:[function(require,module,exports){
+module.exports = '<div>\n    <adminr-panel>\n        <panel-heading>{{title}}</panel-heading>\n        <panel-body>\n            <div class="row">\n                <div class="col-md-12" ng-if="!options.searchDisabled">\n                    <div class="text-right">\n                        <label>\n                            Search:\n                            <input ng-model="resource.params.q" type="text" />\n                        </label>\n                    </div>\n                </div>\n            </div>\n            <div class="row">\n                <div class="col-md-12" id="table-panel-content">\n                </div>\n            </div>\n            <div class="row">\n                <div class="col-md-4 form-inline">\n                    <div class="dataTables_length" ng-if="!options.numbersDisabled">\n                        <label>\n                            Show\n                            <select ng-model="resource.range.limit" ng-options="i for i in [5,10,20,50]" class="form-control input-sm"></select>\n                            entries\n                        </label>\n                    </div>\n                </div>\n                <div class="col-md-8 text-right">\n                    <adminr-pagination class="pagination-md" pagination-resource="resource" ng-if="pagingEnabled()"></adminr-pagination>\n                </div>\n            </div>\n        </panel-body>\n    </adminr-panel>\n</div>';
+},{}]},{},[6]);

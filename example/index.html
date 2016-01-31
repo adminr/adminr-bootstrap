@@ -100,6 +100,33 @@
             {{users.params}}{{users.range}}
         </div>
     </div>
+
+    <div class="row">
+        <adminr-panel>
+            <panel-body>
+                <div class="col-md-6">
+                    <input type="number" ng-model="users.range.offset" />
+                    {{users.params}}{{users.range}}
+                </div>
+                <div class="col-md-6">
+                    search disabled: <input type="checkbox" ng-model="options.searchDisabled" /><br />
+                    numbers disabled: <input type="checkbox" ng-model="options.numbersDisabled" /><br />
+                    paging disabled: <input type="checkbox" ng-model="options.pagingDisabled" /><br />
+                </div>
+                <div adminr-table-panel table-panel-resource="users" table-panel-title="'This is table panel'" table-panel-options="options" class="col-md-12">
+                    <table>
+                        <tr>
+                            <td header="#" sort-column="id">#{{row.id}}</td>
+                            <td header="Name" sort-column="username">{{row.username}}</td>
+                            <td class="schrink">
+                                <a class="btn btn-primary" ng-click="row.id=row.id+1">+</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </panel-body>
+        </adminr-panel>
+    </div>
 </div><!-- /.container -->
 
 </body>

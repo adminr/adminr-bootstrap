@@ -1,0 +1,35 @@
+<div>
+    <adminr-panel>
+        <panel-heading>{{title}}</panel-heading>
+        <panel-body>
+            <div class="row">
+                <div class="col-md-12" ng-if="!options.searchDisabled">
+                    <div class="text-right">
+                        <label>
+                            Search:
+                            <input ng-model="resource.params.q" type="text" />
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" id="table-panel-content">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 form-inline">
+                    <div class="dataTables_length" ng-if="!options.numbersDisabled">
+                        <label>
+                            Show
+                            <select ng-model="resource.range.limit" ng-options="i for i in [5,10,20,50]" class="form-control input-sm"></select>
+                            entries
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-8 text-right">
+                    <adminr-pagination class="pagination-md" pagination-resource="resource" ng-if="pagingEnabled()"></adminr-pagination>
+                </div>
+            </div>
+        </panel-body>
+    </adminr-panel>
+</div>
