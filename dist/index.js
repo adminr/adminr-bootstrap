@@ -42,11 +42,12 @@ mod.directive('adminrPagination', [
     return {
       template: '<uib-pagination ng-change="dataChanged()" ng-model="data.page" total-items="data.count" items-per-page="data.limit" boundary-links="true" rotate="false"></uib-pagination>',
       scope: {
-        adminrResource: '='
+        resource: '=paginationResource'
       },
       link: function(scope) {
         scope.data = {};
-        scope.$watch('adminrResource.range', function(newRange) {
+        scope.$watch('resource.range', function(newRange) {
+          console.log(newRange);
           if (newRange) {
             scope.data.count = newRange.count;
             scope.data.page = Math.floor(newRange.offset / newRange.limit) + 1;
@@ -55,7 +56,7 @@ mod.directive('adminrPagination', [
         }, true);
         return scope.dataChanged = function() {
           var range;
-          range = scope.adminrResource.range;
+          range = scope.resource.range;
           range.limit = scope.data.limit;
           return range.offset = (scope.data.page - 1) * range.limit;
         };
