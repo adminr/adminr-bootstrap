@@ -6,7 +6,8 @@ mod.config(function(AdminrDataSourcesProvider){
     datasource.addResource('User','/users/:id',{id:'@id'})
 })
 
-mod.controller('TestCtrl',function($scope,AdminrDataSources){
+mod.controller('TestCtrl',function($scope,AdminrDataSources,$location){
+    $scope.page = $location.path().replace('/','')
     $scope.datasource = AdminrDataSources.getDataSource('Test')
     $scope.users = $scope.datasource.getResource('User').query()
     $scope.user = $scope.datasource.getResource('User').create()

@@ -3,20 +3,6 @@
         <panel-heading>{{title}}</panel-heading>
         <panel-body>
             <div class="row">
-                <div class="col-md-12" ng-if="!options.searchDisabled">
-                    <div class="text-right">
-                        <label>
-                            Search:
-                            <input ng-model="resource.params.q" type="text" />
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12" id="table-panel-content">
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-md-4 form-inline">
                     <div class="dataTables_length" ng-if="!options.numbersDisabled">
                         <label>
@@ -26,7 +12,27 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-md-8 text-right">
+                <div class="col-md-8 form-inline" ng-if="!options.searchDisabled">
+                    <div class="text-right">
+                        <label>
+                            <div class="input-group">
+                                <input ng-model="resource.params.q" type="text" class="form-control" placeholder="Search..." />
+                                <span class="input-group-btn" ng-if="resource.params.q">
+                                    <a class="btn btn-default" ng-click="resource.params.q = null">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" id="table-panel-content">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-right">
                     <adminr-pagination class="pagination-md" pagination-resource="resource" ng-if="pagingEnabled()"></adminr-pagination>
                 </div>
             </div>

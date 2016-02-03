@@ -15,7 +15,7 @@ mod.directive('adminrPagination',['uibPaginationConfig',(uibPaginationConfig)->
     link: (scope)->
         scope.data = {}
         scope.$watch('resource.range',(newRange)->
-          console.log(newRange)
+#          console.log(newRange)
           if newRange
             scope.data.count = newRange.count
             scope.data.page = Math.floor(newRange.offset / newRange.limit) + 1

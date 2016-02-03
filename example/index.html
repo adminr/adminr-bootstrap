@@ -21,112 +21,33 @@
 
 <div class="container">
 
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Project name</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li ng-class="{active:(page == 'forms')}"><a href="#forms" ng-click="page = 'forms'">Forms</a></li>
+                    <li ng-class="{active:(page == 'tables')}"><a href="#tables" ng-click="page = 'tables'">Tables</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+    </nav>
+
+
     <div class="starter-template text-center">
         <h1>Adminr bootstrap module</h1>
         <p class="lead">This is example of bootstrap components in admin-bootstrap</p>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <adminr-panel>
-                <panel-heading>Test form</panel-heading>
-                <panel-body>
-                    <form adminr-form ng-submit="user.$save()" name="userForm">
-                        <group>
-                            <label>Username</label>
-                            <input type="text" class="form-control" name="username" ng-model="user.data.username" placeholder="Username" required />
-                        </group>
-                        <group>
-                            <label>Gender</label>
-                            <div class="form-control">
-                                <input type="radio" name="gender" value="male" ng-model="user.data.gender" required /> male
-                                <input type="radio" name="gender" value="female" ng-model="user.data.gender" required /> female
-                            </div>
-                        </group>
-                        <button type="submit" class="btn btn-default">Submit</button>
-                    </form>
-                </panel-body>
-            </adminr-panel>
-        </div>
-    </div>
-
-
-
-    <div class="row">
-        <div class="col-lg-8" ng-controller="TestCtrl">
-            <adminr-panel>
-                <panel-heading>this is table test</panel-heading>
-                <panel-body>
-                    <div class="row form-inline">
-                        <div class="col-md-6">
-                            <div class="dataTables_length">
-                                <label>
-                                    Show
-                                    <select ng-model="users.range.limit" ng-options="i for i in [5,10,20,50]" class="form-control input-sm"></select>
-                                    entries
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="text-right">
-                                <label>
-                                    Search:
-                                    <input ng-model="users.params.q" type="text" />
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <table adminr-table>
-                                <tbody body-resource="users" body-resource-path="data" body-generate-header="aa">
-                                <tr>
-                                    <td header="#" sort-column="id">#{{row.id}}</td>
-                                    <td header="Name" sort-column="username">{{row.username}}</td>
-                                    <td class="schrink">
-                                        <a class="btn btn-primary" ui-sref="userDetail({id:row.id})">detail</a>
-                                        <a class="btn btn-danger" ng-click="users.deleteItem(row)">X</a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <adminr-pagination class="pagination-xl" pagination-resource="users"></adminr-pagination>
-                            <!--<uib-pagination  max-size="maxSize" class="pagination-sm" boundary-links="true" rotate="false"></uib-pagination>-->
-                        </div>
-                    </div>
-                </panel-body>
-            </adminr-panel>
-            <!--<div ng-repeat="row in appsResource">{{row}}</div>-->
-            {{users.params}}{{users.range}}
-        </div>
-    </div>
-
-    <div class="row">
-        <adminr-panel>
-            <panel-body>
-                <div class="col-md-6">
-                    <input type="number" ng-model="users.range.offset" />
-                    {{users.params}}{{users.range}}
-                </div>
-                <div class="col-md-6">
-                    search disabled: <input type="checkbox" ng-model="options.searchDisabled" /><br />
-                    numbers disabled: <input type="checkbox" ng-model="options.numbersDisabled" /><br />
-                    paging disabled: <input type="checkbox" ng-model="options.pagingDisabled" /><br />
-                </div>
-                <div adminr-table-panel table-panel-resource="users" table-panel-title="'This is table panel'" table-panel-options="options" class="col-md-12">
-                    <table>
-                        <tr>
-                            <td header="#" sort-column="id">#{{row.id}}</td>
-                            <td header="Name" sort-column="username">{{row.username}}</td>
-                            <td class="schrink">
-                                <a class="btn btn-primary" ng-click="row.id=row.id+1">+</a>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </panel-body>
-        </adminr-panel>
-    </div>
+    <div ng-include="page + '.html'"></div>
 </div><!-- /.container -->
 
 </body>
