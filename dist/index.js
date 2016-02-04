@@ -210,13 +210,16 @@ mod.directive('tableResource', function() {
 mod.directive('bodyResource', function() {
   return {
     compile: function(elm, attributes) {
-      var row;
+      var columnCount, errorRow, row;
       row = elm.find('tr');
       if (row.length === 0) {
         row = angular.element('<tr></tr>');
         elm.append(row);
       }
-      return row.attr('ng-repeat', 'row in ' + attributes.bodyResource + (attributes.bodyResourcePath ? '.' + attributes.bodyResourcePath : ''));
+      row.attr('ng-repeat', 'row in ' + attributes.bodyResource + (attributes.bodyResourcePath ? '.' + attributes.bodyResourcePath : ''));
+      columnCount = row.find('td').length + row.find('th').length;
+      errorRow = angular.element('<tr class="danger" ng-if="resource.error"><td class="text-center" colspan="' + columnCount + '">Could not load resource: <br /> {{resource.error.data}} <button class="btn" ng-click="resource.setNeedsReload()">Retry</button></td></tr>');
+      return elm.append(errorRow);
     }
   };
 });

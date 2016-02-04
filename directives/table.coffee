@@ -53,6 +53,10 @@ mod.directive('bodyResource',()->
         row = angular.element('<tr></tr>')
         elm.append(row)
       row.attr('ng-repeat','row in ' + attributes.bodyResource + if attributes.bodyResourcePath then '.' + attributes.bodyResourcePath else '')
+
+      columnCount = row.find('td').length + row.find('th').length
+      errorRow = angular.element('<tr class="danger" ng-if="resource.error"><td class="text-center" colspan="' + columnCount + '">Could not load resource: <br /> {{resource.error.data}} <button class="btn" ng-click="resource.setNeedsReload()">Retry</button></td></tr>')
+      elm.append(errorRow)
   }
 )
 
