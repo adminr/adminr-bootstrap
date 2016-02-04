@@ -32,7 +32,6 @@ mod.directive('adminrTablePanel',['$compile','$timeout',($compile,$timeout)->
           scope.pagingEnabled = ()->
             if scope.options?.pagingDisabled
               return no
-            console.log(scope.resource.range)
             return scope.resource.range.count > scope.resource.range.limit
             return scope.resource.range.count
       }

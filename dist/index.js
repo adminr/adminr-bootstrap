@@ -72,18 +72,18 @@ mod = angular.module('adminr-bootstrap');
 
 mod.directive('adminrPanel', function() {
   return {
-    compile: function(elm, attributes) {
-      var body, heading, newBody, newHeading, panel;
+    compile: function(elm, attrs) {
+      var body, heading, newBody, newHeading, panel, wrapper;
       panel = angular.element('<div class="panel panel-default"></div>');
       body = elm.find('panel-body');
+      newBody = angular.element('<div class="panel-body"></div>');
+      wrapper = angular.element('<treasure-overlay-spinner active="' + (attrs.panelLoadingSpinner || 'false') + '"></treasure-overlay-spinner>');
       if (body.length === 0) {
-        body = angular.element('<div class="panel-body"></div>');
-        body.append(elm.contents());
+        newBody.append(wrapper.append(elm.contents()));
       } else {
-        newBody = angular.element('<div class="panel-body"></div>');
-        newBody.append(body.contents());
-        body = newBody;
+        newBody.append(wrapper.append(body.contents()));
       }
+      body = newBody;
       heading = elm.find('panel-heading');
       if (heading.length) {
         newHeading = angular.element('<div class="panel-heading"></div>');
@@ -136,7 +136,6 @@ mod.directive('adminrTablePanel', [
               if ((ref = scope.options) != null ? ref.pagingDisabled : void 0) {
                 return false;
               }
-              console.log(scope.resource.range);
               return scope.resource.range.count > scope.resource.range.limit;
               return scope.resource.range.count;
             };
@@ -282,5 +281,5 @@ require('./directives/form.coffee');
 
 
 },{"./directives/form.coffee":1,"./directives/pagination.coffee":2,"./directives/panel.coffee":3,"./directives/table-panel.coffee":4,"./directives/table.coffee":5}],7:[function(require,module,exports){
-module.exports = '<div>\n    <adminr-panel>\n        <panel-heading>{{title}}</panel-heading>\n        <panel-body>\n            <div class="row">\n                <div class="col-md-4 form-inline">\n                    <div class="dataTables_length" ng-if="!options.numbersDisabled">\n                        <label>\n                            Show\n                            <select ng-model="resource.range.limit" ng-options="i for i in [5,10,20,50]" class="form-control input-sm"></select>\n                            entries\n                        </label>\n                    </div>\n                </div>\n                <div class="col-md-8 form-inline" ng-if="!options.searchDisabled">\n                    <div class="text-right">\n                        <label>\n                            <div class="input-group">\n                                <input ng-model="resource.params.q" type="text" class="form-control" placeholder="Search..." />\n                                <span class="input-group-btn" ng-if="resource.params.q">\n                                    <a class="btn btn-default" ng-click="resource.params.q = null">\n                                        <i class="fa fa-times"></i>\n                                    </a>\n                                </span>\n                            </div>\n                        </label>\n                    </div>\n                </div>\n            </div>\n            <div class="row">\n                <div class="col-md-12" id="table-panel-content">\n                </div>\n            </div>\n            <div class="row">\n                <div class="col-md-12 text-right">\n                    <adminr-pagination class="pagination-md" pagination-resource="resource" ng-if="pagingEnabled()"></adminr-pagination>\n                </div>\n            </div>\n        </panel-body>\n    </adminr-panel>\n</div>';
+module.exports = '<div>\n    <adminr-panel panel-loading-spinner="!resource.resolved">\n        <panel-heading>{{title}}</panel-heading>\n        <panel-body>\n            <div class="row">\n                <div class="col-md-4 form-inline">\n                    <div class="dataTables_length" ng-if="!options.numbersDisabled">\n                        <label>\n                            Show\n                            <select ng-model="resource.range.limit" ng-options="i for i in [5,10,20,50]" class="form-control input-sm"></select>\n                            entries\n                        </label>\n                    </div>\n                </div>\n                <div class="col-md-8 form-inline" ng-if="!options.searchDisabled">\n                    <div class="text-right">\n                        <label>\n                            <div class="input-group">\n                                <input ng-model="resource.params.q" type="text" class="form-control" placeholder="Search..." />\n                                <span class="input-group-btn" ng-if="resource.params.q">\n                                    <a class="btn btn-default" ng-click="resource.params.q = null">\n                                        <i class="fa fa-times"></i>\n                                    </a>\n                                </span>\n                            </div>\n                        </label>\n                    </div>\n                </div>\n            </div>\n            <div class="row">\n                <div class="col-md-12" id="table-panel-content">\n                </div>\n            </div>\n            <div class="row">\n                <div class="col-md-12 text-right">\n                    <adminr-pagination class="pagination-md" pagination-resource="resource" ng-if="pagingEnabled()"></adminr-pagination>\n                </div>\n            </div>\n        </panel-body>\n    </adminr-panel>\n</div>';
 },{}]},{},[6]);

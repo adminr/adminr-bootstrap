@@ -3,16 +3,18 @@ mod = angular.module('adminr-bootstrap')
 
 mod.directive('adminrPanel',()->
   return {
-    compile: (elm, attributes)->
+    compile: (elm, attrs)->
       panel = angular.element('<div class="panel panel-default"></div>')
       body = elm.find('panel-body')
+
+      newBody = angular.element('<div class="panel-body"></div>')
+      wrapper = angular.element('<treasure-overlay-spinner active="' + (attrs.panelLoadingSpinner or 'false') + '"></treasure-overlay-spinner>')
       if body.length is 0
-        body = angular.element('<div class="panel-body"></div>')
-        body.append(elm.contents())
+        newBody.append(wrapper.append(elm.contents()))
       else
-        newBody = angular.element('<div class="panel-body"></div>')
-        newBody.append(body.contents())
-        body = newBody
+        newBody.append(wrapper.append(body.contents()))
+      body = newBody
+
 
       heading = elm.find('panel-heading')
       if heading.length

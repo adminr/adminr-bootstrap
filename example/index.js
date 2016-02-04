@@ -1,4 +1,4 @@
-var mod = angular.module('adminr-core-test',['adminr-bootstrap']);
+var mod = angular.module('adminr-core-test',['adminr-bootstrap','treasure-overlay-spinner']);
 
 mod.config(function(AdminrDataSourcesProvider){
     var datasource = AdminrDataSourcesProvider.createDataSource('Test','https://adminr-test-api.herokuapp.com',{supportsRangeHeader:true})
@@ -7,7 +7,7 @@ mod.config(function(AdminrDataSourcesProvider){
 })
 
 mod.controller('TestCtrl',function($scope,AdminrDataSources,$location){
-    $scope.page = $location.path().replace('/','')
+    $scope.page = $location.path().replace('/','') || 'forms'
     $scope.datasource = AdminrDataSources.getDataSource('Test')
     $scope.users = $scope.datasource.getResource('User').query()
     $scope.user = $scope.datasource.getResource('User').create()
