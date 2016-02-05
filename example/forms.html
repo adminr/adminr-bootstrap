@@ -3,19 +3,19 @@
         <adminr-panel panel-loading-spinner="loading.bool">
             <panel-heading>Test form</panel-heading>
             <panel-body>
-                <form adminr-form ng-submit="user.$save()" name="userForm">
-                    <group>
-                        <label>Username</label>
-                        <input type="text" class="form-control" name="username" ng-model="user.data.username" placeholder="Username" required />
-                    </group>
-                    <group>
-                        <label>Gender</label>
+                <form adminr-form title="Send" ng-submit="saveUser()" name="testForm">
+                    <div form-group label="Username" model="user.data.username">
+                        <!--<label>Username</label>-->
+                        <input type="text" class="form-control" name="username" minlength="3" ng-model="user.data.username" placeholder="Username" required />
+                    </div>
+                    <div form-group label="Gender">
+                        <!--<label>Gender</label>-->
                         <div class="form-control">
                             <input type="radio" name="gender" value="male" ng-model="user.data.gender" required /> male
                             <input type="radio" name="gender" value="female" ng-model="user.data.gender" required /> female
                         </div>
-                    </group>
-                    <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+                    <button form-submit saving="!user.resolved">Submit</button>
                 </form>
             </panel-body>
         </adminr-panel>

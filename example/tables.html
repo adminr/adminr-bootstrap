@@ -14,10 +14,11 @@
             <div adminr-table-panel table-panel-resource="users" table-panel-title="'This is table panel'" table-panel-options="options" class="col-md-12">
                 <table>
                     <tr>
-                        <td header="#" sort-column="id">#{{row.id}}</td>
-                        <td header="Name" sort-column="username">{{row.username}}</td>
+                        <td header="#" sort-column="id" class="schrink">#{{row.id}}</td>
+                        <td header="Name" sort-column="username" adminr-grid-cell="username"></td>
                         <td class="schrink">
-                            <a class="btn btn-primary" ng-click="row.id=row.id+1">+</a>
+                            <a class="btn btn-primary" ng-click="row.id=row.id+1">id++</a>
+                            <a class="btn btn-primary" adminr-grid-button="row">edit</a>
                         </td>
                     </tr>
                 </table>

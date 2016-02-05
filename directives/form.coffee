@@ -4,15 +4,46 @@ mod = angular.module('adminr-bootstrap')
 mod.directive('adminrForm',()->
   return {
     compile: (elm, attributes)->
-      name = elm.attr('name') or ('form' + Math.round(Math.random()*10000000))
-      elm.attr('name',name)
-      for group in elm.find('group')
-        group = angular.element(group)
-        groupName = name + '.' + group.find('input').attr('name')
-        wrapper = angular.element('<div class="form-group" ng-class="{\'has-error\':' + groupName + '.$invalid && !' + groupName + '.$untouched}"></div>')
-        wrapper.append(group.contents())
-        wrapper.append(angular.element('<p class="help-block" ng-if="' + groupName + '.$error.required && !' + groupName + '.$untouched">This field is required</p>'))
-        group.replaceWith(wrapper)
-        console.log(group.find('input').attr('name'))
+      name = elm.attr('name')
+      if not name
+        console.error('adminr-form needs name attribute to be set')
+  }
+)
+
+mod.directive('formGroup',()->
+  return {
+    compile:(elm,attributes)->
+      elm.prepend(angular.element('<label>' + attributes.label + '</label>'))
+      formName = elm.parent().attr('name')
+      groupName = formName + '.' + (elm.find('input').attr('name') or elm.find('textarea').attr('name'))
+      elm.addClass('form-group')
+      return (scope,elm)->
+        hasErrorEval = groupName + '.$invalid && !' + groupName + '.$untouched'
+        scope.$watch(hasErrorEval,(hasError)->
+          if hasError
+            elm.addClass('has-error')
+          else
+            elm.removeClass('has-error')
+        )
+  }
+)
+
+
+mod.directive('formSubmit',()->
+  return {
+    compile:(elm,attrs)->
+      elm.addClass('btn btn-primary')
+      elm.attr('type','submit')
+      elm.text(elm.text() + ' ')
+      icon = angular.element('<i class="hidden fa fa-spin fa-spinner"></i>')
+      elm.append(icon)
+      return (scope,elm)->
+        scope.$watch(attrs.saving,(isSaving)->
+          if isSaving
+            elm.find('i').removeClass('hidden')
+          else
+            elm.find('i').addClass('hidden')
+        )
+
   }
 )

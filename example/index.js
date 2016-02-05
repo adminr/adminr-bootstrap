@@ -11,4 +11,10 @@ mod.controller('TestCtrl',function($scope,AdminrDataSources,$location){
     $scope.datasource = AdminrDataSources.getDataSource('Test')
     $scope.users = $scope.datasource.getResource('User').query()
     $scope.user = $scope.datasource.getResource('User').create()
+
+    $scope.saveUser = function(){
+        $scope.user.$save().then(function(){
+            //$scope.user = $scope.datasource.getResource('User').create()
+        })
+    }
 })

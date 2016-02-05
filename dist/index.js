@@ -6,28 +6,137 @@ mod = angular.module('adminr-bootstrap');
 mod.directive('adminrForm', function() {
   return {
     compile: function(elm, attributes) {
-      var group, groupName, i, len, name, ref, results, wrapper;
-      name = elm.attr('name') || ('form' + Math.round(Math.random() * 10000000));
-      elm.attr('name', name);
-      ref = elm.find('group');
-      results = [];
-      for (i = 0, len = ref.length; i < len; i++) {
-        group = ref[i];
-        group = angular.element(group);
-        groupName = name + '.' + group.find('input').attr('name');
-        wrapper = angular.element('<div class="form-group" ng-class="{\'has-error\':' + groupName + '.$invalid && !' + groupName + '.$untouched}"></div>');
-        wrapper.append(group.contents());
-        wrapper.append(angular.element('<p class="help-block" ng-if="' + groupName + '.$error.required && !' + groupName + '.$untouched">This field is required</p>'));
-        group.replaceWith(wrapper);
-        results.push(console.log(group.find('input').attr('name')));
+      var name;
+      name = elm.attr('name');
+      if (!name) {
+        return console.error('adminr-form needs name attribute to be set');
       }
-      return results;
+    }
+  };
+});
+
+mod.directive('formGroup', function() {
+  return {
+    compile: function(elm, attributes) {
+      var formName, groupName;
+      elm.prepend(angular.element('<label>' + attributes.label + '</label>'));
+      formName = elm.parent().attr('name');
+      groupName = formName + '.' + (elm.find('input').attr('name') || elm.find('textarea').attr('name'));
+      elm.addClass('form-group');
+      return function(scope, elm) {
+        var hasErrorEval;
+        hasErrorEval = groupName + '.$invalid && !' + groupName + '.$untouched';
+        return scope.$watch(hasErrorEval, function(hasError) {
+          if (hasError) {
+            return elm.addClass('has-error');
+          } else {
+            return elm.removeClass('has-error');
+          }
+        });
+      };
+    }
+  };
+});
+
+mod.directive('formSubmit', function() {
+  return {
+    compile: function(elm, attrs) {
+      var icon;
+      elm.addClass('btn btn-primary');
+      elm.attr('type', 'submit');
+      elm.text(elm.text() + ' ');
+      icon = angular.element('<i class="hidden fa fa-spin fa-spinner"></i>');
+      elm.append(icon);
+      return function(scope, elm) {
+        return scope.$watch(attrs.saving, function(isSaving) {
+          if (isSaving) {
+            return elm.find('i').removeClass('hidden');
+          } else {
+            return elm.find('i').addClass('hidden');
+          }
+        });
+      };
     }
   };
 });
 
 
 },{}],2:[function(require,module,exports){
+var mod;
+
+mod = angular.module('adminr-bootstrap');
+
+mod.directive('adminrGridCell', function() {
+  return {
+    compile: function(elm, attributes) {
+      var content, input, valueKey;
+      valueKey = 'row.' + attributes.adminrGridCell;
+      console.log(valueKey);
+      content = angular.element('<span>{{' + valueKey + '}}</span>');
+      content.append(elm.contents());
+      elm.append(content);
+      input = angular.element('<input class="hidden form-control input-sm" type="text" ng-model="row.' + attributes.adminrGridCell + '" />');
+      elm.append(input);
+      return function(scope, elm, attrs) {
+        elm.bind('click', function() {
+          return scope.$apply(function() {
+            return scope.row._editing = true;
+          });
+        });
+        return scope.$watch('row._editing', function(editing) {
+          if (editing) {
+            elm.find('span').addClass('hidden');
+            return elm.find('input').removeClass('hidden');
+          } else {
+            elm.find('input').addClass('hidden');
+            return elm.find('span').removeClass('hidden');
+          }
+        });
+      };
+    }
+  };
+});
+
+mod.directive('adminrGridButton', function() {
+  return {
+    compile: function(elm, attributes) {
+      var icon;
+      elm.empty();
+      icon = angular.element('<span>Edit <i class="fa fa-pencil"></i></span><span class="hidden">Save <i class="fa fa-floppy-o"></i></span><span class="hidden">Saving <i class="fa fa-spin fa-spinner"></i></span>');
+      elm.append(icon);
+      return function(scope, elm) {
+        elm.bind('click', function() {
+          return scope.$apply(function() {
+            if (scope.row._editing) {
+              angular.element(elm.find('span')[0]).addClass('hidden');
+              angular.element(elm.find('span')[1]).addClass('hidden');
+              angular.element(elm.find('span')[2]).removeClass('hidden');
+              return scope.row.$save().then(function() {
+                return delete scope.row._editing;
+              });
+            } else {
+              return scope.row._editing = true;
+            }
+          });
+        });
+        return scope.$watch('row._editing', function(editing) {
+          if (editing) {
+            angular.element(elm.find('span')[0]).addClass('hidden');
+            angular.element(elm.find('span')[1]).removeClass('hidden');
+            return angular.element(elm.find('span')[2]).addClass('hidden');
+          } else {
+            angular.element(elm.find('span')[0]).removeClass('hidden');
+            angular.element(elm.find('span')[1]).addClass('hidden');
+            return angular.element(elm.find('span')[2]).addClass('hidden');
+          }
+        });
+      };
+    }
+  };
+});
+
+
+},{}],3:[function(require,module,exports){
 var mod;
 
 mod = angular.module('adminr-bootstrap');
@@ -65,7 +174,7 @@ mod.directive('adminrPagination', [
 ]);
 
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var mod;
 
 mod = angular.module('adminr-bootstrap');
@@ -99,7 +208,7 @@ mod.directive('adminrPanel', function() {
 });
 
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var mod;
 
 mod = angular.module('adminr-bootstrap');
@@ -147,7 +256,7 @@ mod.directive('adminrTablePanel', [
 ]);
 
 
-},{"../views/table-panel.html":7}],5:[function(require,module,exports){
+},{"../views/table-panel.html":8}],6:[function(require,module,exports){
 var mod;
 
 mod = angular.module('adminr-bootstrap');
@@ -267,7 +376,7 @@ mod.directive('headerResource', function() {
 });
 
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var mod;
 
 mod = angular.module('adminr-bootstrap', ['adminr-datasources', 'ui.bootstrap']);
@@ -282,7 +391,9 @@ require('./directives/table-panel.coffee');
 
 require('./directives/form.coffee');
 
+require('./directives/grid.coffee');
 
-},{"./directives/form.coffee":1,"./directives/pagination.coffee":2,"./directives/panel.coffee":3,"./directives/table-panel.coffee":4,"./directives/table.coffee":5}],7:[function(require,module,exports){
+
+},{"./directives/form.coffee":1,"./directives/grid.coffee":2,"./directives/pagination.coffee":3,"./directives/panel.coffee":4,"./directives/table-panel.coffee":5,"./directives/table.coffee":6}],8:[function(require,module,exports){
 module.exports = '<div>\n    <adminr-panel panel-loading-spinner="!resource.resolved">\n        <panel-heading>{{title}}</panel-heading>\n        <panel-body>\n            <div class="row">\n                <div class="col-md-4 form-inline">\n                    <div class="dataTables_length" ng-if="!options.numbersDisabled">\n                        <label>\n                            Show\n                            <select ng-model="resource.range.limit" ng-options="i for i in [5,10,20,50]" class="form-control input-sm"></select>\n                            entries\n                        </label>\n                    </div>\n                </div>\n                <div class="col-md-8 form-inline" ng-if="!options.searchDisabled">\n                    <div class="text-right">\n                        <label>\n                            <div class="input-group">\n                                <input ng-model="resource.params.q" type="text" class="form-control" placeholder="Search..." />\n                                <span class="input-group-btn" ng-if="resource.params.q">\n                                    <a class="btn btn-default" ng-click="resource.params.q = null">\n                                        <i class="fa fa-times"></i>\n                                    </a>\n                                </span>\n                            </div>\n                        </label>\n                    </div>\n                </div>\n            </div>\n            <div class="row">\n                <div class="col-md-12" id="table-panel-content">\n                </div>\n            </div>\n            <div class="row">\n                <div class="col-md-12 text-right">\n                    <adminr-pagination class="pagination-md" pagination-resource="resource" ng-if="pagingEnabled()"></adminr-pagination>\n                </div>\n            </div>\n        </panel-body>\n    </adminr-panel>\n</div>';
-},{}]},{},[6]);
+},{}]},{},[7]);
