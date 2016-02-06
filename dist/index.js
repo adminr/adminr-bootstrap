@@ -141,6 +141,71 @@ var mod;
 
 mod = angular.module('adminr-bootstrap');
 
+mod.directive('adminrModal', [
+  '$uibModal', function($uibModal) {
+    return {
+      compile: function(elm, attributes) {
+        var body, footer, header, template;
+        header = elm.find('modal-header');
+        body = elm.find('modal-body');
+        footer = elm.find('modal-footer');
+        console.log(body.html());
+        header = '<div class="modal-header">' + (header.html() || '<h3>' + (attributes.title || 'Modal title') + '</h3>') + '</div>';
+        body = '<div class="modal-body">' + (body.html() || elm.html()) + '</div>';
+        footer = '<div class="modal-footer">' + (footer.html() || '<button class="btn btn-warning" ng-click="$close()">Close</button>') + '</div>';
+        template = header + body + footer;
+        elm.empty();
+        console.log(template);
+        return function(scope, elm, attrs) {
+          var childScope, modalInstance, modalName, runOn;
+          modalName = attrs.name;
+          modalInstance = null;
+          runOn = function(fnName) {
+            if (attrs['on' + fnName]) {
+              return scope.$eval(attrs['on' + fnName]);
+            }
+          };
+          if (modalName) {
+            childScope = scope.$new();
+            return childScope.modal = scope[modalName] = {
+              open: function() {
+                console.log('open modal!!');
+                modalInstance = $uibModal.open({
+                  controller: 'AdminrModalCtrl',
+                  size: attrs.size,
+                  scope: childScope,
+                  template: template
+                });
+                return runOn('Open');
+              },
+              close: function() {
+                return modalInstance.close();
+              },
+              _didClose: function() {
+                return runOn('Close');
+              }
+            };
+          }
+        };
+      }
+    };
+  }
+]);
+
+mod.controller('AdminrModalCtrl', [
+  '$scope', function($scope) {
+    return $scope.$on('modal.closing', function() {
+      return $scope.modal._didClose();
+    });
+  }
+]);
+
+
+},{}],4:[function(require,module,exports){
+var mod;
+
+mod = angular.module('adminr-bootstrap');
+
 mod.directive('adminrPagination', [
   'uibPaginationConfig', function(uibPaginationConfig) {
     uibPaginationConfig.firstText = '<<';
@@ -174,7 +239,7 @@ mod.directive('adminrPagination', [
 ]);
 
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 var mod;
 
 mod = angular.module('adminr-bootstrap');
@@ -208,7 +273,7 @@ mod.directive('adminrPanel', function() {
 });
 
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var mod;
 
 mod = angular.module('adminr-bootstrap');
@@ -256,7 +321,7 @@ mod.directive('adminrTablePanel', [
 ]);
 
 
-},{"../views/table-panel.html":8}],6:[function(require,module,exports){
+},{"../views/table-panel.html":9}],7:[function(require,module,exports){
 var mod;
 
 mod = angular.module('adminr-bootstrap');
@@ -376,7 +441,7 @@ mod.directive('headerResource', function() {
 });
 
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 var mod;
 
 mod = angular.module('adminr-bootstrap', ['adminr-datasources', 'ui.bootstrap']);
@@ -393,7 +458,9 @@ require('./directives/form.coffee');
 
 require('./directives/grid.coffee');
 
+require('./directives/modal.coffee');
 
-},{"./directives/form.coffee":1,"./directives/grid.coffee":2,"./directives/pagination.coffee":3,"./directives/panel.coffee":4,"./directives/table-panel.coffee":5,"./directives/table.coffee":6}],8:[function(require,module,exports){
+
+},{"./directives/form.coffee":1,"./directives/grid.coffee":2,"./directives/modal.coffee":3,"./directives/pagination.coffee":4,"./directives/panel.coffee":5,"./directives/table-panel.coffee":6,"./directives/table.coffee":7}],9:[function(require,module,exports){
 module.exports = '<div>\n    <adminr-panel panel-loading-spinner="!resource.resolved">\n        <panel-heading>{{title}}</panel-heading>\n        <panel-body>\n            <div class="row">\n                <div class="col-md-4 form-inline">\n                    <div class="dataTables_length" ng-if="!options.numbersDisabled">\n                        <label>\n                            Show\n                            <select ng-model="resource.range.limit" ng-options="i for i in [5,10,20,50]" class="form-control input-sm"></select>\n                            entries\n                        </label>\n                    </div>\n                </div>\n                <div class="col-md-8 form-inline" ng-if="!options.searchDisabled">\n                    <div class="text-right">\n                        <label>\n                            <div class="input-group">\n                                <input ng-model="resource.params.q" type="text" class="form-control" placeholder="Search..." />\n                                <span class="input-group-btn" ng-if="resource.params.q">\n                                    <a class="btn btn-default" ng-click="resource.params.q = null">\n                                        <i class="fa fa-times"></i>\n                                    </a>\n                                </span>\n                            </div>\n                        </label>\n                    </div>\n                </div>\n            </div>\n            <div class="row">\n                <div class="col-md-12" id="table-panel-content">\n                </div>\n            </div>\n            <div class="row">\n                <div class="col-md-12 text-right">\n                    <adminr-pagination class="pagination-md" pagination-resource="resource" ng-if="pagingEnabled()"></adminr-pagination>\n                </div>\n            </div>\n        </panel-body>\n    </adminr-panel>\n</div>';
-},{}]},{},[7]);
+},{}]},{},[8]);

@@ -18,3 +18,20 @@ mod.controller('TestCtrl',function($scope,AdminrDataSources,$location){
         })
     }
 })
+
+mod.controller('ModalTest',function($scope,$uibModal){
+    $scope.open = function(){
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            template:'hello this is modal',
+            //templateUrl: 'myModalContent.html',
+            //controller: 'ModalInstanceCtrl',
+            size: 'lg',
+            //resolve: {
+            //    items: function () {
+            //        return $scope.items;
+            //    }
+            //}
+        });
+    }
+})

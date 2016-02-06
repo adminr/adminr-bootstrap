@@ -1,0 +1,19 @@
+<div ng-controller="ModalTest" ng-init="value = {data:'first'}">
+    <adminr-modal name="myModal" on-open="state='open'" on-close="state='closed'">
+        <!--<modal-header>-->
+            <!--<h3>Modal</h3>-->
+        <!--</modal-header>-->
+        <!--<modal-body>-->
+            <div>
+                <input type="text" ng-model="value.data" class="form-control" />
+                this is test modal content
+            </div>
+        <!--</modal-body>-->
+        <!--<modal-footer>-->
+            <!--<button class="btn btn-warning" type="button" ng-click="$close()">Close</button>-->
+        <!--</modal-footer>-->
+    </adminr-modal>
+    local value: {{value.data}} <br />
+    state: {{state || 'null'}} <br />
+    <button type="button" class="btn btn-default" ng-click="myModal.open()">Open modal!</button>
+</div>

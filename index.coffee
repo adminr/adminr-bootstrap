@@ -6,4 +6,4 @@ require('./directives/table.coffee')
 require('./directives/table-panel.coffee')
 require('./directives/form.coffee')
 require('./directives/grid.coffee')
-
+require('./directives/modal.coffee')
