@@ -9,8 +9,6 @@ mod.directive('adminrModal',['$uibModal',($uibModal)->
       body = elm.find('modal-body')
       footer = elm.find('modal-footer')
 
-      console.log(body.html())
-
       header = '<div class="modal-header">' + (header.html() or '<h3>' + (attributes.title or 'Modal title') + '</h3>') + '</div>'
       body = '<div class="modal-body">' + (body.html() or elm.html()) + '</div>'
       footer = '<div class="modal-footer">' + (footer.html() or '<button class="btn btn-warning" ng-click="$close()">Close</button>') + '</div>'
@@ -18,7 +16,6 @@ mod.directive('adminrModal',['$uibModal',($uibModal)->
       template = header + body + footer
       elm.empty()
 
-      console.log(template)
 
       return (scope,elm,attrs)->
         modalName = attrs.name
@@ -33,7 +30,6 @@ mod.directive('adminrModal',['$uibModal',($uibModal)->
           childScope = scope.$new()
           childScope.modal = scope[modalName] = {
             open:()->
-              console.log('open modal!!')
               modalInstance = $uibModal.open({
                 controller:'AdminrModalCtrl',
                 size:attrs.size,

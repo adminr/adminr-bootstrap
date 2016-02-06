@@ -5,7 +5,6 @@ mod.directive('adminrGridCell',()->
   return {
     compile: (elm, attributes)->
       valueKey = 'row.' + attributes.adminrGridCell
-      console.log(valueKey)
       content = angular.element('<span>{{' + valueKey + '}}</span>')
       content.append(elm.contents())
       elm.append(content)
