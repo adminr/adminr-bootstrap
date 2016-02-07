@@ -197,14 +197,19 @@ mod.directive('adminrModal', [
           rootForm = null;
         }
         header = elm.find('modal-header');
+        header.detach();
         body = elm.find('modal-body');
+        body.detach();
         footer = elm.find('modal-footer');
+        footer.detach();
         header = '<div class="modal-header">' + (header.html() || '<h3>' + (attributes.title || 'Modal title') + '</h3>') + '</div>';
         body = '<div class="modal-body">' + (body.html() || elm.html()) + '</div>';
         footer = '<div class="modal-footer">' + (footer.html() || '<button class="btn btn-warning" ng-click="$close()">Close</button>') + '</div>';
         template = header + body + footer;
         if (rootForm) {
-          rootForm.html(template);
+          rootForm.append(header);
+          rootForm.append(body);
+          rootForm.append(footer);
           template = rootForm[0].outerHTML;
         }
         elm.empty();

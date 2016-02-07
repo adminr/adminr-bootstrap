@@ -10,8 +10,11 @@ mod.directive('adminrModal',['$uibModal',($uibModal)->
         rootForm = null
 
       header = elm.find('modal-header')
+      header.detach()
       body = elm.find('modal-body')
+      body.detach()
       footer = elm.find('modal-footer')
+      footer.detach()
 
       header = '<div class="modal-header">' + (header.html() or '<h3>' + (attributes.title or 'Modal title') + '</h3>') + '</div>'
       body = '<div class="modal-body">' + (body.html() or elm.html()) + '</div>'
@@ -20,7 +23,9 @@ mod.directive('adminrModal',['$uibModal',($uibModal)->
       template = header + body + footer
 
       if rootForm
-        rootForm.html(template)
+        rootForm.append(header)
+        rootForm.append(body)
+        rootForm.append(footer)
         template = rootForm[0].outerHTML
 
       elm.empty()
