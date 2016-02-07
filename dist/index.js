@@ -6,10 +6,6 @@ mod = angular.module('adminr-bootstrap');
 mod.directive('adminrDeleteButton', [
   '$interpolate', function($interpolate) {
     return {
-      scope: {
-        'resource': '=adminrDeleteButton',
-        'onDelete': '&'
-      },
       compile: function(elm, attrs) {
         var icon, messageExpr;
         elm.empty();
@@ -18,6 +14,10 @@ mod.directive('adminrDeleteButton', [
         messageExpr = $interpolate(attrs.message || 'Do you really want to delete item #{{row.id}}?');
         return function(scope, elm) {
           var showButtonState;
+          scope.resource = scope.$eval(attrs.adminrDeleteButton);
+          scope.onDelete = function() {
+            return scope.$eval(attrs.onDelete);
+          };
           showButtonState = function(index) {
             elm.find('span').addClass('hidden');
             return angular.element(elm.find('span')[index]).removeClass('hidden');
@@ -191,7 +191,11 @@ mod.directive('adminrModal', [
   '$uibModal', function($uibModal) {
     return {
       compile: function(elm, attributes) {
-        var body, footer, header, template;
+        var body, footer, header, rootForm, template;
+        rootForm = elm.find('form');
+        if (rootForm.parent()[0] !== elm[0]) {
+          rootForm = null;
+        }
         header = elm.find('modal-header');
         body = elm.find('modal-body');
         footer = elm.find('modal-footer');
@@ -199,6 +203,10 @@ mod.directive('adminrModal', [
         body = '<div class="modal-body">' + (body.html() || elm.html()) + '</div>';
         footer = '<div class="modal-footer">' + (footer.html() || '<button class="btn btn-warning" ng-click="$close()">Close</button>') + '</div>';
         template = header + body + footer;
+        if (rootForm) {
+          rootForm.html(template);
+          template = rootForm[0].outerHTML;
+        }
         elm.empty();
         return function(scope, elm, attrs) {
           var childScope, modalInstance, modalName, runOn;

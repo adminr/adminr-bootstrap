@@ -5,6 +5,10 @@ mod.directive('adminrModal',['$uibModal',($uibModal)->
   return {
     compile: (elm, attributes)->
 
+      rootForm = elm.find('form')
+      if rootForm.parent()[0] isnt elm[0]
+        rootForm = null
+
       header = elm.find('modal-header')
       body = elm.find('modal-body')
       footer = elm.find('modal-footer')
@@ -14,6 +18,11 @@ mod.directive('adminrModal',['$uibModal',($uibModal)->
       footer = '<div class="modal-footer">' + (footer.html() or '<button class="btn btn-warning" ng-click="$close()">Close</button>') + '</div>'
 
       template = header + body + footer
+
+      if rootForm
+        rootForm.html(template)
+        template = rootForm[0].outerHTML
+
       elm.empty()
 
 

@@ -3,10 +3,10 @@ mod = angular.module('adminr-bootstrap')
 
 mod.directive('adminrDeleteButton',['$interpolate',($interpolate)->
   return {
-    scope: {
-      'resource':'=adminrDeleteButton',
-      'onDelete':'&'
-    }
+#    scope: {
+#      'resource':'=adminrDeleteButton',
+#      'onDelete':'&'
+#    }
     compile: (elm, attrs)->
 
       elm.empty()
@@ -16,6 +16,9 @@ mod.directive('adminrDeleteButton',['$interpolate',($interpolate)->
       messageExpr = $interpolate(attrs.message or 'Do you really want to delete item #{{row.id}}?')
 
       return (scope,elm)->
+
+        scope.resource = scope.$eval(attrs.adminrDeleteButton)
+        scope.onDelete = ()-> scope.$eval(attrs.onDelete)
 
         showButtonState = (index)->
           elm.find('span').addClass('hidden')
