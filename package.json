@@ -1,6 +1,6 @@
 {
   "name": "adminr-bootstrap",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "devDependencies": {
     "browser-sync": "^2.11.1",
     "browserify": "^11.0.1",
