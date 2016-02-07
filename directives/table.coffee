@@ -88,8 +88,5 @@ mod.directive('headerResource',()->
             $scope.$eval(resource + '.params.order = \'-' + sortColumn + '\'')
           else
             $scope.$eval(resource + '.params.order = \'' + sortColumn + '\'')
-
-
-
   }
 )

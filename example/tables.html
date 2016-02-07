@@ -1,34 +1,48 @@
-
+<adminr-resource assign="users" init="User.query({limit:5,order:'username'})"></adminr-resource>
 <div class="row">
-    <adminr-panel>
-        <panel-body>
-            <div class="col-md-6">
-                <input type="number" ng-model="users.range.offset" />
-                {{users.params}}{{users.range}}
+    <div class="col-lg-12">
+        <adminr-modal name="addUserModal" on-close="users.reload()">
+            <div>
+                <adminr-resource assign="user" init="User.create()" on-save="addUserModal.close()"></adminr-resource>
+                <form adminr-form ng-submit="user.$save()">
+                    <div form-group label="Username">
+                        <input type="text" ng-model="user.data.username" class="form-control" required />
+                    </div>
+                    <button form-submit saving="!user.resolved">Save</button>
+                </form>
             </div>
-            <div class="col-md-6">
-                search disabled: <input type="checkbox" ng-model="options.searchDisabled" /><br />
-                numbers disabled: <input type="checkbox" ng-model="options.numbersDisabled" /><br />
-                paging disabled: <input type="checkbox" ng-model="options.pagingDisabled" /><br />
-            </div>
-            <div adminr-table-panel table-panel-resource="users" table-panel-title="'This is table panel'" table-panel-options="options" class="col-md-12">
-                <table>
-                    <tr>
-                        <td header="#" sort-column="id" class="schrink">#{{row.id}}</td>
-                        <td header="Name" sort-column="username" adminr-grid-cell="username"></td>
-                        <td class="schrink">
-                            <a class="btn btn-primary" ng-click="row.id=row.id+1">id++</a>
-                            <a class="btn btn-primary" adminr-grid-button="row">edit</a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </panel-body>
-    </adminr-panel>
+        </adminr-modal>
+        <adminr-panel>
+            <panel-body>
+                <div class="col-md-6">
+                    <input type="number" ng-model="users.range.offset" />
+                    {{users.params}}{{users.range}}
+                </div>
+                <div class="col-md-6">
+                    search disabled: <input type="checkbox" ng-model="options.searchDisabled" /><br />
+                    numbers disabled: <input type="checkbox" ng-model="options.numbersDisabled" /><br />
+                    paging disabled: <input type="checkbox" ng-model="options.pagingDisabled" /><br />
+                </div>
+                <div adminr-table-panel table-panel-resource="users" table-panel-title="'This is table panel'" add-button="addUserModal.open()" table-panel-options="options" class="col-md-12">
+                    <table>
+                        <tr>
+                            <td header="#" sort-column="id" class="schrink">#{{row.id}}</td>
+                            <td header="Name" sort-column="username" adminr-grid-cell="username"></td>
+                            <td class="schrink">
+                                <a class="btn btn-primary" ng-click="row.id=row.id+1">id++</a>
+                                <a class="btn btn-primary" adminr-grid-button="row">edit</a>
+                                <a class="btn btn-danger" adminr-delete-button="row" on-delete="users.reload()">Delete</a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </panel-body>
+        </adminr-panel>
+    </div>
 </div>
 
 <div class="row">
-    <div class="col-lg-8" ng-controller="TestCtrl">
+    <div class="col-lg-8">
         <adminr-panel>
             <panel-heading>this is table test</panel-heading>
             <panel-body>

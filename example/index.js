@@ -6,8 +6,11 @@ mod.config(function(AdminrDataSourcesProvider){
     datasource.addResource('User','/users/:id',{id:'@id'})
 })
 
+mod.run(function($rootScope,$location){
+    $rootScope.page = $location.path().replace('/','') || 'forms'
+})
+
 mod.controller('TestCtrl',function($scope,AdminrDataSources,$location){
-    $scope.page = $location.path().replace('/','') || 'forms'
     $scope.datasource = AdminrDataSources.getDataSource('Test')
     $scope.users = $scope.datasource.getResource('User').query()
     $scope.user = $scope.datasource.getResource('User').create()
@@ -16,22 +19,5 @@ mod.controller('TestCtrl',function($scope,AdminrDataSources,$location){
         $scope.user.$save().then(function(){
             //$scope.user = $scope.datasource.getResource('User').create()
         })
-    }
-})
-
-mod.controller('ModalTest',function($scope,$uibModal){
-    $scope.open = function(){
-        var modalInstance = $uibModal.open({
-            animation: $scope.animationsEnabled,
-            template:'hello this is modal',
-            //templateUrl: 'myModalContent.html',
-            //controller: 'ModalInstanceCtrl',
-            size: 'lg',
-            //resolve: {
-            //    items: function () {
-            //        return $scope.items;
-            //    }
-            //}
-        });
     }
 })

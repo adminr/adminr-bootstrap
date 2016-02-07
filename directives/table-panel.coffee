@@ -4,13 +4,15 @@ mod = angular.module('adminr-bootstrap')
 mod.directive('adminrTablePanel',['$compile','$timeout',($compile,$timeout)->
   template = require('../views/table-panel.html')
   return {
-    scope:{
-      title:'=tablePanelTitle'
-      resource:'=tablePanelResource'
-      options:'=tablePanelOptions'
-    },
+#    scope:{
+#      title:'=tablePanelTitle'
+#      resource:'=tablePanelResource'
+#      options:'=tablePanelOptions'
+#      addButtonFunction:'&addButton'
+#    },
     compile:(elm,attrs)->
-      table = elm.find('table').clone()
+      table = elm.find('table')
+      table.detach()
 
       content = angular.element(template)
       elm.empty()
@@ -24,16 +26,21 @@ mod.directive('adminrTablePanel',['$compile','$timeout',($compile,$timeout)->
       tableContainer.removeAttr('id')
       tableContainer.append(table)
 
-      return {
-        post:(scope,elm,attrs,ctrl,transcludeFn)->
-          elm.append(content)
-          $compile(content)(scope)
+      return (scope,elm,attrs)->
 
-          scope.pagingEnabled = ()->
-            if scope.options?.pagingDisabled
-              return no
-            return scope.resource.range.count > scope.resource.range.limit
-            return scope.resource.range.count
-      }
+        scope.resource = scope.$eval(attrs.tablePanelResource)
+        scope.title = scope.$eval(attrs.tablePanelTitle)
+        scope.options = scope.$eval(attrs.tablePanelOptions)
+        scope.addButtonFunction = ()-> scope.$eval(attrs.addButton)
+
+        scope.addButtonEnabled = attrs.addButton isnt undefined
+
+        elm.append(content)
+        $compile(content)(scope)
+
+        scope.pagingEnabled = ()->
+          if scope.options?.pagingDisabled
+            return no
+          return scope.resource.range.count > scope.resource.range.limit
   }
 ])

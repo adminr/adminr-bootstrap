@@ -1,10 +1,10 @@
 mod = angular.module('adminr-bootstrap')
 
 
-mod.directive('adminrPanel',()->
+mod.directive('adminrPanel',['$compile',($compile)->
   return {
     compile: (elm, attrs)->
-      panel = angular.element('<div class="panel panel-default"></div>')
+      panel = angular.element('<div class="panel panel-{{' + (attrs.context or '\'default\'') + '}}"></div>')
       body = elm.find('panel-body')
 
       newBody = angular.element('<div class="panel-body"></div>')
@@ -18,8 +18,20 @@ mod.directive('adminrPanel',()->
 
       heading = elm.find('panel-heading')
       if heading.length
+
+        buttons = heading.find('button')
+        buttons.addClass('pull-right')
+        buttons.detach()
+
+
         newHeading = angular.element('<div class="panel-heading"></div>')
-        newHeading.append(heading.contents())
+        title = angular.element('<h3 class="panel-title pull-left"></h3>')
+        title.append(heading.contents())
+        newHeading.append(title)
+        for i in [buttons.length..0]
+          newHeading.append(buttons[i])
+        newHeading.append('<div class="clearfix"></div>')
+
         heading.detach()
         heading = newHeading
         panel.append(heading)
@@ -28,6 +40,7 @@ mod.directive('adminrPanel',()->
 
       panel.append(body)
 
-      elm.replaceWith(panel)
+      elm.append(panel)
+
   }
-)
+])

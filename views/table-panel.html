@@ -1,6 +1,9 @@
 <div>
     <adminr-panel panel-loading-spinner="!resource.resolved">
-        <panel-heading>{{title}}</panel-heading>
+        <panel-heading>
+            {{title}}
+            <button class="btn btn-default fa fa-plus" ng-if="addButtonEnabled" ng-click="addButtonFunction()"></button>
+        </panel-heading>
         <panel-body>
             <div class="row">
                 <div class="col-md-4 form-inline">

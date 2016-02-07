@@ -17,6 +17,16 @@ mod.directive('adminrGridCell',()->
             scope.row._editing = yes
           )
         )
+        elm.bind('keyup',(e)->
+          if e.code is 'Enter'
+            scope.$apply(()->
+              delete scope.row._editing
+              scope.row._saving = yes
+              scope.row.$save().then(()->
+                delete scope.row._saving
+              )
+            )
+        )
         scope.$watch('row._editing',(editing)->
           if editing
             elm.find('span').addClass('hidden')
@@ -37,32 +47,30 @@ mod.directive('adminrGridButton',()->
       elm.append(icon)
 
       return (scope,elm)->
+
+        showButtonState = (index)->
+          elm.find('span').addClass('hidden')
+          angular.element(elm.find('span')[index]).removeClass('hidden')
+
         elm.bind('click',()->
           scope.$apply(()->
             if scope.row._editing
-              angular.element(elm.find('span')[0]).addClass('hidden')
-              angular.element(elm.find('span')[1]).addClass('hidden')
-              angular.element(elm.find('span')[2]).removeClass('hidden')
+              delete scope.row._editing
+              scope.row._saving = yes
               scope.row.$save().then(()->
-                delete scope.row._editing
+                delete scope.row._saving
               )
             else
               scope.row._editing = yes
           )
         )
-        scope.$watch('row._editing',(editing)->
-          if editing
-            angular.element(elm.find('span')[0]).addClass('hidden')
-            angular.element(elm.find('span')[1]).removeClass('hidden')
-            angular.element(elm.find('span')[2]).addClass('hidden')
+        scope.$watchGroup(['row._editing','row._saving'],(newValue)->
+          if newValue[0]
+            showButtonState(1)
+          else if newValue[1]
+            showButtonState(2)
           else
-            angular.element(elm.find('span')[0]).removeClass('hidden')
-            angular.element(elm.find('span')[1]).addClass('hidden')
-            angular.element(elm.find('span')[2]).addClass('hidden')
-#          if editing
-#            elm.text('Save ')
-#          else
-#            elm.text('Edit ')
+            showButtonState(0)
         )
   }
 )
