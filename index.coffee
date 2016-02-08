@@ -1,4 +1,4 @@
-mod = angular.module('adminr-bootstrap',['adminr-datasources','ui.bootstrap'])
+mod = angular.module('adminr-bootstrap',['adminr-datasources','ui.bootstrap','treasure-overlay-spinner'])
 
 require('./directives/pagination.coffee')
 require('./directives/panel.coffee')
