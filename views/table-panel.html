@@ -35,7 +35,10 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12 text-right">
+                <div class="col-md-4 text-left">
+                    <span ng-if="resource.range.count">Showing {{resource.range.offset + 1}}-{{resource.range.end + 1}} of {{resource.range.count}}</span>
+                </div>
+                <div class="col-md-8 text-right">
                     <adminr-pagination class="pagination-md" pagination-resource="resource" ng-if="pagingEnabled()"></adminr-pagination>
                 </div>
             </div>
