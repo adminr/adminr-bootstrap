@@ -45,6 +45,44 @@ var mod;
 
 mod = angular.module('adminr-bootstrap');
 
+mod.directive('adminrForm', function() {
+  return {
+    priority: -10,
+    compile: function(elm, attrs) {
+      var btn, button, errorElm, i, len, ref;
+      if (attrs.adminrForm) {
+        elm.attr('ng-submit', attrs.adminrForm + '.$save()');
+      }
+      errorElm = elm.find('form-error');
+      if (errorElm.length === 0) {
+        errorElm = angular.element('<div class="alert alert-danger">Error sending form: {{formResource.error.data.error || formResource.error.data || formResource.error}}</div>');
+        elm.prepend(errorElm);
+      }
+      errorElm.attr('ng-if', 'formResource.error');
+      ref = elm.find('button');
+      for (i = 0, len = ref.length; i < len; i++) {
+        button = ref[i];
+        btn = angular.element(button);
+        if (typeof btn.attr('form-submit') !== 'undefined') {
+          btn.attr('saving', '!formResource.resolved');
+        }
+      }
+      return function(scope, elm) {
+        if (attrs.adminrForm) {
+          scope.$watch(attrs.adminrForm, function(value) {
+            return scope.formResource = value;
+          });
+        }
+        return elm.on('submit', function() {
+          return scope.$apply(function() {
+            return scope.formResource.$save();
+          });
+        });
+      };
+    }
+  };
+});
+
 mod.directive('formGroup', function() {
   return {
     compile: function(elm, attributes) {

@@ -1,11 +1,13 @@
+
 <div class="row">
     <div class="col-md-12">
-        <adminr-resource assign="user" init="User.create()" on-save="addUserModal.close()" on-save-reinit="true"></adminr-resource>
+
+        <adminr-resource assign="user" ng-submit="user.$save()" init="User.create()" on-save="addUserModal.close()" on-save-reinit="true"></adminr-resource>
 
         <adminr-panel>
             <panel-heading>Test form</panel-heading>
             <panel-body>
-                <form adminr-form title="Send" ng-submit="user.$save()" name="testForm">
+                <form adminr-form="user" title="Send" name="testForm">
                     <div form-group label="Username" model="user.data.username">
                         <!--<label>Username</label>-->
                         <input type="text" class="form-control" name="username" minlength="3" ng-model="user.data.username" placeholder="Username" required />
@@ -17,7 +19,52 @@
                             <input type="radio" name="gender" value="female" ng-model="user.data.gender" required /> female
                         </div>
                     </div>
-                    <button form-submit saving="!user.resolved">Submit</button>
+                    <button form-submit>Submit</button>
+                </form>
+            </panel-body>
+        </adminr-panel>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12" ng-init="">
+        <h2>Form with error</h2>
+
+        <adminr-resource assign="user2" init="InvalidUserEntity.create()" on-save="addUserModal.close()" on-save-reinit="true"></adminr-resource>
+
+        <adminr-panel>
+            <panel-heading>Test form</panel-heading>
+            <panel-body>
+                <form adminr-form="user2" title="Send" name="testForm">
+                    <div form-group label="Username" model="user.data.username">
+                        <!--<label>Username</label>-->
+                        <input type="text" class="form-control" name="username" minlength="3" ng-model="user.data.invalidAttribute" placeholder="Username" />
+                    </div>
+                    <button form-submit>Submit</button>
+                </form>
+            </panel-body>
+        </adminr-panel>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12" ng-init="">
+        <h2>Form with custom error</h2>
+
+        <adminr-resource assign="user3" init="InvalidUserEntity.create()" on-save="addUserModal.close()" on-save-reinit="true"></adminr-resource>
+
+        <adminr-panel>
+            <panel-heading>Test form</panel-heading>
+            <panel-body>
+                <form adminr-form="user3" title="Send" name="testForm">
+                    <form-error>
+                        <div class="alert alert-danger">It's sad: {{formResource.error}}</div>
+                    </form-error>
+                    <div form-group label="Username" model="user.data.username">
+                        <!--<label>Username</label>-->
+                        <input type="text" class="form-control" name="username" minlength="3" ng-model="user.data.invalidAttribute" placeholder="Username" />
+                    </div>
+                    <button form-submit>Submit</button>
                 </form>
             </panel-body>
         </adminr-panel>

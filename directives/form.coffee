@@ -1,14 +1,40 @@
 mod = angular.module('adminr-bootstrap')
 
 
-#mod.directive('adminrForm',()->
-#  return {
-#    compile: (elm, attributes)->
-#      name = elm.attr('name')
+mod.directive('adminrForm',()->
+  return {
+    priority: -10
+    compile: (elm, attrs)->
+#      name = attrs.name
 #      if not name
 #        console.error('adminr-form needs name attribute to be set')
-#  }
-#)
+
+      if attrs.adminrForm
+        elm.attr('ng-submit',attrs.adminrForm + '.$save()')
+
+      errorElm = elm.find('form-error')
+      if errorElm.length is 0
+        errorElm = angular.element('<div class="alert alert-danger">Error sending form: {{formResource.error.data.error || formResource.error.data || formResource.error}}</div>')
+        elm.prepend(errorElm)
+      errorElm.attr('ng-if','formResource.error')
+
+      for button in elm.find('button')
+        btn = angular.element(button)
+        if typeof btn.attr('form-submit') isnt 'undefined'
+          btn.attr('saving','!formResource.resolved')
+
+      return (scope,elm)->
+        if attrs.adminrForm
+          scope.$watch(attrs.adminrForm,(value)->
+            scope.formResource = value
+          )
+        elm.on('submit',()->
+          scope.$apply(()->
+            scope.formResource.$save()
+          )
+        )
+  }
+)
 
 mod.directive('formGroup',()->
   return {

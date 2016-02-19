@@ -4,6 +4,7 @@ mod.config(function(AdminrDataSourcesProvider){
     var datasource = AdminrDataSourcesProvider.createDataSource('Test','https://adminr-test-api.herokuapp.com',{supportsRangeHeader:true})
     datasource.addResource('Me','/me')
     datasource.addResource('User','/users/:id',{id:'@id'})
+    datasource.addResource('InvalidUserEntity','/blah-users/:id',{id:'@id'})
 })
 
 mod.run(function($rootScope,$location){
